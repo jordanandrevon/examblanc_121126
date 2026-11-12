@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CycleNova — Prévenir les retours grâce à l'IA</title>
+<style>
+  :root{
+    --ink:#14212b; --muted:#5b6b77; --accent:#0f7b6c; --accent-soft:#e3f2ef;
+    --warn:#b4541a; --line:#d9e1e5; --bg:#f4f6f7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1d2a33;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+  .deck{height:100%;display:flex;align-items:center;justify-content:center}
+  .slide{
+    display:none;width:min(96vw,calc(96vh*16/9));aspect-ratio:16/9;background:#fff;
+    border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.35);
+    padding:4.2% 5.5% 6.5%;position:relative;overflow:hidden;
+    font-size:clamp(11px,1.75vw,26px);
+  }
+  .slide.active{display:flex;flex-direction:column}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.55em;background:var(--accent)}
+  .kicker{font-size:.72em;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.4em}
+  h1{font-size:2.5em;line-height:1.12;font-weight:700}
+  h2{font-size:1.7em;line-height:1.15;font-weight:700;margin-bottom:.9em}
+  p,li{font-size:1em;line-height:1.45}
+  .lead{font-size:1.15em;color:var(--muted);margin-top:.8em}
+  ul{list-style:none}
+  ul li{padding-left:1.1em;position:relative;margin:.45em 0}
+  ul li::before{content:"";position:absolute;left:0;top:.62em;width:.45em;height:.45em;background:var(--accent);border-radius:50%}
+  table{width:100%;border-collapse:collapse;font-size:.9em}
+  th{text-align:left;font-weight:700;color:var(--accent);border-bottom:2px solid var(--accent);padding:.45em .6em}
+  td{padding:.48em .6em;border-bottom:1px solid var(--line);vertical-align:top}
+  .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .footer{position:absolute;bottom:3%;left:5.5%;right:5.5%;display:flex;justify-content:space-between;font-size:.62em;color:var(--muted)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2em}
+  .card{background:var(--bg);border-radius:6px;padding:1em 1.2em}
+  .card h3{font-size:1.05em;margin-bottom:.4em}
+  .big{white-space:nowrap;font-size:2.6em;font-weight:700;color:var(--accent);line-height:1}
+  .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:4px;padding:.1em .5em;font-size:.85em}
+  .callout{margin-top:auto;border-left:.3em solid var(--accent);background:var(--accent-soft);padding:.7em 1em;font-weight:600}
+  .callout.warn{border-color:var(--warn);background:#fbefe6}
+  .title-slide{justify-content:center}
+  .title-slide .meta{margin-top:2.2em;color:var(--muted);font-size:.95em}
+  .flow{display:flex;gap:.6em;align-items:stretch;margin:.4em 0 1.1em}
+  .flow .step{flex:1;background:var(--bg);border-radius:6px;padding:.7em .8em;text-align:center}
+  .flow .step b{display:block;color:var(--accent);margin-bottom:.2em}
+  .flow .arrow{align-self:center;color:var(--accent);font-weight:700}
+  .nav{position:fixed;bottom:14px;right:18px;color:#c9d4da;font-size:13px;font-family:inherit}
+  @media print{
+    @page{size:16in 9in;margin:0}
+    html,body{background:#fff}
+    .deck{display:block;height:auto}
+    .slide{display:flex!important;flex-direction:column;width:16in;height:9in;aspect-ratio:auto;border-radius:0;box-shadow:none;page-break-after:always;font-size:30px}
+    .nav{display:none}
+  }
+  .two{display:grid;grid-template-columns:1fr 1fr;gap:1.4em}
+  .small{font-size:.85em;color:var(--muted)}
+</style>
+</head>
+<body>
+<div class="deck">
+<section class="slide title-slide active">
+    <div class="kicker">BC04 · Partie 4 — Présentation au CTO</div>
+    <h1>Prévenir les retours produits<br>grâce à un score de risque</h1>
+    <p class="lead">Recommandation de projet IA pour CycleNova</p>
+    <p class="meta">Jordan Andrevon — Data Analyst · Novembre 2026</p>
+  </section>
+<section class="slide">
+    <div class="kicker">Le problème</div>
+    <h2>Un retour sur six : un coût élevé, concentré sur deux catégories</h2>
+    <div class="grid2" style="grid-template-columns:repeat(3,1fr)">
+      <div class="card"><p class="big">16,8 %</p><p>des ventes valides sont retournées (494 retours sur 2 941 ventes)</p></div>
+      <div class="card"><p class="big">25,5 %</p><p>de retours sur le <b>Textile</b>, 23,3 % sur les <b>Chaussures</b></p></div>
+      <div class="card"><p class="big">27 %</p><p>du chiffre d'affaires réalisé par les Chaussures</p></div>
+    </div>
+    <ul style="margin-top:1em">
+      <li>Chaque retour coûte : transport aller-retour, traitement, remboursement, produit parfois invendable.</li>
+      <li>Le taux de retour augmente (16,2 % en 2025 → 17,6 % en 2026) alors que le CA baisse.</li>
+      <li>Motifs connus : <b>taille</b>, produit défectueux, changement d'avis.</li>
+    </ul>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>2</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Recommandation</div>
+    <h2>Lancer un outil de prévention des retours</h2>
+    <div class="two" style="font-size:.9em">
+      <div class="card"><h3>La solution</h3>
+        <ul><li>Un <b>score de risque de retour</b> calculé à chaque commande.</li>
+        <li>Si le risque est élevé : <b>actions préventives douces</b> (guide des tailles, conseil personnalisé, vérification avant expédition).</li>
+        <li><b>Aucune décision pénalisante automatique</b> pour le client.</li></ul></div>
+      <div class="card"><h3>Pourquoi cette option</h3>
+        <ul><li>Données disponibles et déjà nettoyées ; un premier modèle existe.</li>
+        <li>Coût direct et mesurable.</li>
+        <li>La prévision de la demande disposerait de seulement 22 mois d'historique : trop court pour une saisonnalité fiable.</li></ul></div>
+    </div>
+    <div class="callout warn">Point de départ honnête : le prototype actuel (AUC 0,59) est meilleur que le hasard mais encore faible — d'où un projet en deux temps : enrichir les données, puis piloter.</div>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>3</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Bénéfices</div>
+    <h2>Des bénéfices vérifiables, mesurés par un test A/B</h2>
+    <table>
+      <tr><th>Indicateur</th><th>Aujourd'hui</th><th>Objectif à 6 mois</th><th>Mesure</th></tr>
+      <tr><td>Taux de retour Textile + Chaussures</td><td class="num">≈ 24 %</td><td class="num">−2 points</td><td>groupe pilote vs groupe témoin</td></tr>
+      <tr><td>Retours pour motif « taille »</td><td class="num">≈ 35 % des retours</td><td class="num">−15 %</td><td>motifs de retour</td></tr>
+      <tr><td>Taux de conversion</td><td>référence actuelle</td><td>stable</td><td>ne doit pas baisser</td></tr>
+      <tr><td>Charge du support</td><td>référence actuelle</td><td>+5 % max</td><td>tickets traités</td></tr>
+    </table>
+    <p class="small" style="margin-top:.8em">Hypothèses explicites : objectifs à valider en cadrage ; le gain financier = retours évités × coût moyen d'un retour (à fournir par la logistique).</p>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>4</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Risques</div>
+    <h2>Éthique, RGPD, environnement : risques et mesures</h2>
+    <table>
+      <tr><th>Risque</th><th>Mesure de réduction</th></tr>
+      <tr><td><b>Éthique</b> — traiter injustement un client sur la base d'un score imprécis</td><td>Actions uniquement incitatives ; jamais de blocage ou de pénalité ; supervision humaine ; contrôle des biais par canal et catégorie</td></tr>
+      <tr><td><b>RGPD</b> — données client (historique de retours, taille)</td><td>Minimisation, pseudonymisation, information des clients, durée de conservation définie, analyse d'impact (AIPD) avec le DPO ; pas de décision entièrement automatisée (art. 22)</td></tr>
+      <tr><td><b>Environnement</b> — calcul et stockage</td><td>Modèle léger (forêt aléatoire, CPU), calcul en lot une fois par jour, pas d'IA générative ; en contrepartie, moins de transports de retour</td></tr>
+      <tr><td><b>Dérive</b> — comportements qui changent</td><td>Suivi mensuel des performances, réentraînement trimestriel</td></tr>
+    </table>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>5</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Ressources</div>
+    <h2>Compétences, outils, données et budget</h2>
+    <div class="two">
+      <div>
+        <ul>
+          <li><b>Compétences</b> : data analyse, machine learning, data engineering, connaissance métier (produit, support).</li>
+          <li><b>Outils et infrastructure</b> : BigQuery (existant), Python / scikit-learn, requêtes planifiées, Looker Studio pour le suivi.</li>
+          <li><b>Données complémentaires</b> : taille commandée, historique de retours du client (pseudonymisé), délai de livraison, avis produits.</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Budget — hypothèses explicites</h3>
+        <table>
+          <tr><td>Data Analyst, 50 % × 12 sem.</td><td class="num">30 j</td></tr>
+          <tr><td>Data Engineer, 30 % × 12 sem.</td><td class="num">18 j</td></tr>
+          <tr><td>Intégration site / app (IT)</td><td class="num">10 j</td></tr>
+          <tr><td>Coût journalier moyen (hyp.)</td><td class="num">400 €</td></tr>
+          <tr><td><b>Total main-d'œuvre</b></td><td class="num"><b>≈ 23 200 €</b></td></tr>
+          <tr><td>Cloud (BigQuery, calcul)</td><td class="num">&lt; 50 €/mois</td></tr>
+        </table>
+      </div>
+    </div>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>6</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Planning</div>
+    <h2>Rétroplanning sur 12 semaines</h2>
+    <table>
+      <tr><th>Semaines</th><th>Étape</th><th>Critère de validation</th></tr>
+      <tr><td><b>S1–S2</b></td><td>Cadrage, AIPD avec le DPO, accès aux données complémentaires</td><td>Accord du DPO, données disponibles</td></tr>
+      <tr><td><b>S3–S5</b></td><td>Modèle v2 avec les nouvelles données</td><td>AUC ≥ 0,65 sur une période test postérieure</td></tr>
+      <tr><td><b>S6–S7</b></td><td>Intégration du score sur le site et l'application</td><td>Score calculé chaque jour sans erreur</td></tr>
+      <tr><td><b>S8–S11</b></td><td>Pilote A/B sur Textile et Chaussures</td><td>Baisse significative du taux de retour vs témoin</td></tr>
+      <tr><td><b>S12</b></td><td>Bilan et décision de généralisation</td><td>Go / No go</td></tr>
+    </table>
+    <p style="margin-top:.6em;font-size:.9em"><b>Dépendances</b> : validation du DPO, disponibilité de l'équipe IT. <b>Difficultés</b> : signal prédictif faible, qualité des données, dérive dans le temps.</p>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>7</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Organisation</div>
+    <h2>Méthode de projet et équipe</h2>
+    <div class="two">
+      <div>
+        <h3 style="margin-bottom:.4em">Méthode agile (Scrum)</h3>
+        <ul>
+          <li>Sprints de <b>2 semaines</b>, démo à la fin de chaque sprint.</li>
+          <li>Point hebdomadaire de 30 min, tableau de bord partagé.</li>
+          <li>Décisions consignées dans un registre (seuil, choix du modèle).</li>
+        </ul>
+      </div>
+      <table>
+        <tr><th>Rôle</th><th>Tâches</th></tr>
+        <tr><td><b>Responsable produit</b></td><td>Porteur du projet, priorités, décision finale</td></tr>
+        <tr><td><b>Data Analyst</b></td><td>Analyse, modèle, mesure du pilote</td></tr>
+        <tr><td><b>Data Engineer</b></td><td>Données, automatisation, suivi</td></tr>
+        <tr><td><b>Responsable support</b></td><td>Impact client, charge, retours terrain</td></tr>
+        <tr><td><b>DPO</b> (consulté)</td><td>Conformité RGPD, AIPD</td></tr>
+      </table>
+    </div>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>8</span></div>
+  </section>
+<section class="slide">
+    <div class="kicker">Prochaines étapes</div>
+    <h2>Ce que nous vous demandons aujourd'hui</h2>
+    <ul>
+      <li><b>Valider le lancement</b> d'un projet de 12 semaines, budget estimé ≈ 23 000 €.</li>
+      <li><b>Autoriser l'accès</b> aux données complémentaires, sous contrôle du DPO.</li>
+      <li><b>Désigner</b> le responsable produit porteur du projet.</li>
+    </ul>
+    <div class="callout">Décision de généralisation en semaine 12, uniquement si le pilote prouve une baisse des retours sans dégrader l'expérience client.</div>
+    <div class="footer"><span>CycleNova · Projet IA — Prévention des retours</span><span>9</span></div>
+  </section>
+</div>
+<div class="nav">← → pour naviguer · Ctrl+P pour exporter en PDF</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];let i=0;
+  function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('active',k===i));}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(i+1);}
+    if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(i-1);}
+  });
+  document.addEventListener('click',e=>{ if(e.clientX>innerWidth/2) show(i+1); else show(i-1); });
+</script>
+</body>
+</html>

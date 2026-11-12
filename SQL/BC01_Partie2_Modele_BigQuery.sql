@@ -1,0 +1,8 @@
+-- MODELE DE SYNTAXE (non résolu) : à adapter avec votre PROJECT_ID.
+-- 1. Importer les trois CSV vers votre projet -> dataset `cyclenova_source`.
+-- 2. Créer le dataset `cyclenova_travail` via BigQuery.
+-- 3. Compléter trois requêtes de copie et trois requêtes de vérification.
+-- CREATE OR REPLACE TABLE `PROJECT_ID.cyclenova_travail.NOM_TABLE` AS
+-- SELECT * FROM `PROJECT_ID.cyclenova_source.NOM_TABLE`;
+-- SELECT COUNT(*) FROM `PROJECT_ID.cyclenova_source.NOM_TABLE`;
+-- SELECT COUNT(*) FROM `PROJECT_ID.cyclenova_travail.NOM_TABLE`;

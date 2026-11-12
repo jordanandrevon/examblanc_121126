@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>CycleNova — Fiabiliser les données de ventes et suivre les retours</title>
+<style>
+  :root{
+    --ink:#14212b; --muted:#5b6b77; --accent:#0f7b6c; --accent-soft:#e3f2ef;
+    --warn:#b4541a; --line:#d9e1e5; --bg:#f4f6f7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%;background:#1d2a33;font-family:"Segoe UI",Roboto,Helvetica,Arial,sans-serif;color:var(--ink)}
+  .deck{height:100%;display:flex;align-items:center;justify-content:center}
+  .slide{
+    display:none;width:min(96vw,calc(96vh*16/9));aspect-ratio:16/9;background:#fff;
+    border-radius:6px;box-shadow:0 10px 40px rgba(0,0,0,.35);
+    padding:4.2% 5.5% 6.5%;position:relative;overflow:hidden;
+    font-size:clamp(11px,1.75vw,26px);
+  }
+  .slide.active{display:flex;flex-direction:column}
+  .slide::before{content:"";position:absolute;left:0;top:0;bottom:0;width:.55em;background:var(--accent)}
+  .kicker{font-size:.72em;letter-spacing:.14em;text-transform:uppercase;color:var(--accent);font-weight:700;margin-bottom:.4em}
+  h1{font-size:2.5em;line-height:1.12;font-weight:700}
+  h2{font-size:1.7em;line-height:1.15;font-weight:700;margin-bottom:.9em}
+  p,li{font-size:1em;line-height:1.45}
+  .lead{font-size:1.15em;color:var(--muted);margin-top:.8em}
+  ul{list-style:none}
+  ul li{padding-left:1.1em;position:relative;margin:.45em 0}
+  ul li::before{content:"";position:absolute;left:0;top:.62em;width:.45em;height:.45em;background:var(--accent);border-radius:50%}
+  table{width:100%;border-collapse:collapse;font-size:.9em}
+  th{text-align:left;font-weight:700;color:var(--accent);border-bottom:2px solid var(--accent);padding:.45em .6em}
+  td{padding:.48em .6em;border-bottom:1px solid var(--line);vertical-align:top}
+  .num{font-variant-numeric:tabular-nums;white-space:nowrap}
+  .footer{position:absolute;bottom:3%;left:5.5%;right:5.5%;display:flex;justify-content:space-between;font-size:.62em;color:var(--muted)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.2em}
+  .card{background:var(--bg);border-radius:6px;padding:1em 1.2em}
+  .card h3{font-size:1.05em;margin-bottom:.4em}
+  .big{white-space:nowrap;font-size:2.6em;font-weight:700;color:var(--accent);line-height:1}
+  .tag{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:700;border-radius:4px;padding:.1em .5em;font-size:.85em}
+  .callout{margin-top:auto;border-left:.3em solid var(--accent);background:var(--accent-soft);padding:.7em 1em;font-weight:600}
+  .callout.warn{border-color:var(--warn);background:#fbefe6}
+  .title-slide{justify-content:center}
+  .title-slide .meta{margin-top:2.2em;color:var(--muted);font-size:.95em}
+  .flow{display:flex;gap:.6em;align-items:stretch;margin:.4em 0 1.1em}
+  .flow .step{flex:1;background:var(--bg);border-radius:6px;padding:.7em .8em;text-align:center}
+  .flow .step b{display:block;color:var(--accent);margin-bottom:.2em}
+  .flow .arrow{align-self:center;color:var(--accent);font-weight:700}
+  .nav{position:fixed;bottom:14px;right:18px;color:#c9d4da;font-size:13px;font-family:inherit}
+  @media print{
+    @page{size:16in 9in;margin:0}
+    html,body{background:#fff}
+    .deck{display:block;height:auto}
+    .slide{display:flex!important;flex-direction:column;width:16in;height:9in;aspect-ratio:auto;border-radius:0;box-shadow:none;page-break-after:always;font-size:30px}
+    .nav{display:none}
+  }
+</style>
+</head>
+<body>
+<div class="deck">
+
+  <!-- 1 -->
+  <section class="slide title-slide active">
+    <div class="kicker">BC01 · Partie 1 — Responsable des opérations</div>
+    <h1>CycleNova<br>Fiabiliser les données de ventes<br>et suivre les retours</h1>
+    <p class="lead">Plan d'exploitation et d'automatisation des données</p>
+    <p class="meta">Jordan Andrevon — Data Analyst · Novembre 2026</p>
+  </section>
+
+  <!-- 2 -->
+  <section class="slide">
+    <div class="kicker">Enjeux</div>
+    <h2>Deux questions métier prioritaires</h2>
+    <div class="grid2">
+      <div class="card">
+        <span class="tag">Question 1</span>
+        <h3 style="margin-top:.6em">Quels produits et quels canaux génèrent le plus de retours, et pourquoi ?</h3>
+        <p class="big" style="margin:.5em 0 .2em">16,8 %</p>
+        <p>des ventes valides sont retournées. Les retours coûtent en transport, remboursement et produits invendables.</p>
+      </div>
+      <div class="card">
+        <span class="tag">Question 2</span>
+        <h3 style="margin-top:.6em">Nos prix sont-ils compétitifs, et pèsent-ils sur nos ventes ?</h3>
+        <p class="big" style="margin:.5em 0 .2em">−21 %</p>
+        <p>de chiffre d'affaires entre janv.–oct. 2025 et janv.–oct. 2026. Deux concurrents suivis chaque mois.</p>
+      </div>
+    </div>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>2</span></div>
+  </section>
+
+  <!-- 3 -->
+  <section class="slide">
+    <div class="kicker">État des lieux</div>
+    <h2>Nos sources de données</h2>
+    <table>
+      <tr><th>Table</th><th>Une ligne =</th><th>Volume</th><th>Actualisation</th><th>Variables essentielles</th></tr>
+      <tr><td><b>Ventes</b></td><td>une vente d'un produit</td><td class="num">3 005</td><td>quotidienne</td><td>date, produit, quantité, prix, remise, code promo, canal, retour</td></tr>
+      <tr><td><b>Produits</b></td><td>un produit du catalogue</td><td class="num">65</td><td>à chaque évolution du catalogue</td><td>catégorie, marque, prix catalogue, coût</td></tr>
+      <tr><td><b>Prix concurrents</b></td><td>un relevé (produit, concurrent, date)</td><td class="num">2 818</td><td>mensuelle (le 1er du mois)</td><td>concurrent, date du relevé, prix</td></tr>
+    </table>
+    <ul style="margin-top:1em">
+      <li>Format <b>CSV</b>, tables reliées par l'identifiant produit. Historique : janvier 2025 → octobre 2026.</li>
+      <li>Le <b>retour</b> n'est connu que plusieurs jours après la vente.</li>
+    </ul>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>3</span></div>
+  </section>
+
+  <!-- 4 -->
+  <section class="slide">
+    <div class="kicker">Architecture</div>
+    <h2>Collecte et stockage</h2>
+    <div class="flow">
+      <div class="step"><b>Sources</b>Export ventes (quotidien)<br>Relevés de prix (mensuel)</div>
+      <div class="arrow">→</div>
+      <div class="step"><b>BigQuery · brut</b>Copie fidèle, jamais modifiée</div>
+      <div class="arrow">→</div>
+      <div class="step"><b>BigQuery · travail</b>Données contrôlées et nettoyées</div>
+      <div class="arrow">→</div>
+      <div class="step"><b>Looker Studio</b>Tableau de bord</div>
+    </div>
+    <ul>
+      <li><b>BigQuery</b> : base centralisée, requêtes SQL, coût très faible à ce volume, sécurité et droits d'accès par rôle.</li>
+      <li><b>Deux espaces séparés</b> (brut / travail) : on peut toujours revenir à la source et rejouer un traitement.</li>
+      <li><b>Looker Studio</b> : connexion directe à BigQuery, gratuit, partageable avec la direction.</li>
+    </ul>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>4</span></div>
+  </section>
+
+  <!-- 5 -->
+  <section class="slide">
+    <div class="kicker">Automatisation</div>
+    <h2>Une chaîne qui tourne seule — et qui prévient en cas de problème</h2>
+    <div class="grid2">
+      <div class="card"><h3>Déclenchement</h3><p>Requêtes planifiées dans BigQuery : ventes <b>chaque jour à 6 h</b>, prix concurrents <b>le 2 de chaque mois</b>.</p></div>
+      <div class="card"><h3>Journaux</h3><p>Chaque exécution est tracée : date, nombre de lignes chargées, durée, statut.</p></div>
+      <div class="card"><h3>Gestion des erreurs</h3><p><b>3 relances</b> automatiques. Chargement sans doublon possible : rejouer un jour ne double pas les ventes.</p></div>
+      <div class="card"><h3>Alertes</h3><p>E-mail au responsable si : échec du job, volume du jour anormal (<b>±30 %</b>), clés produit manquantes <b>&gt; 1 %</b>.</p></div>
+    </div>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>5</span></div>
+  </section>
+
+  <!-- 6 -->
+  <section class="slide">
+    <div class="kicker">Qualité</div>
+    <h2>Plan de contrôle qualité — appliqué aux données actuelles</h2>
+    <table>
+      <tr><th>Contrôle</th><th>Constaté</th><th>Règle appliquée</th></tr>
+      <tr><td>Doublons</td><td class="num">5 ventes · 1 produit</td><td>une seule ligne conservée</td></tr>
+      <tr><td>Cohérence des clés produit</td><td class="num">19 ventes</td><td>manquantes ou inconnues → exclues et signalées</td></tr>
+      <tr><td>Montants aberrants</td><td class="num">31 ventes</td><td>quantité ≤ 0, prix ≤ 0 ou absent, remise hors 0–100 % → exclues</td></tr>
+      <tr><td>Valeurs nulles</td><td class="num">13 ventes</td><td>retour ou canal inconnu → conservées, signalées</td></tr>
+      <tr><td>Dates et types</td><td>conformes</td><td>format AAAA-MM-JJ vérifié à chaque chargement</td></tr>
+    </table>
+    <div class="callout"><b>1,8 %</b> des ventes écartées — chaque exclusion suit une règle écrite et vérifiable.</div>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>6</span></div>
+  </section>
+
+  <!-- 7 -->
+  <section class="slide">
+    <div class="kicker">Planning</div>
+    <h2>Rétroplanning sur six semaines</h2>
+    <table>
+      <tr><th>Semaine</th><th>Étape</th><th>Livrable</th><th>Jalon</th></tr>
+      <tr><td><b>S1</b></td><td>Cadrage, inventaire des sources</td><td>Note de cadrage</td><td>Validation du périmètre</td></tr>
+      <tr><td><b>S2</b></td><td>Collecte, import dans BigQuery</td><td>Tables chargées</td><td>Effectifs source = copie</td></tr>
+      <tr><td><b>S3</b></td><td>Contrôles qualité, règles de nettoyage</td><td>Rapport qualité</td><td>Règles validées</td></tr>
+      <tr><td><b>S4</b></td><td>Automatisation, journaux, alertes</td><td>Chaîne planifiée</td><td>7 jours sans incident</td></tr>
+      <tr><td><b>S5</b></td><td>Analyses, tableau de bord</td><td>Dashboard v1</td><td>Revue avec les opérations</td></tr>
+      <tr><td><b>S6</b></td><td>Tests, ajustements, restitution</td><td>Présentation finale</td><td>Mise en service</td></tr>
+    </table>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>7</span></div>
+  </section>
+
+  <!-- 8 -->
+  <section class="slide">
+    <div class="kicker">Conclusion</div>
+    <h2>Premiers résultats et décisions attendues</h2>
+    <div class="grid2" style="grid-template-columns:repeat(3,1fr);font-size:.85em">
+      <div class="card"><p class="big">238 742 €</p><p>CA brut sur les ventes valides</p></div>
+      <div class="card"><p class="big">2 950</p><p>ventes valides</p></div>
+      <div class="card"><p class="big">16,8 %</p><p>taux de retour</p></div>
+    </div>
+    <ul style="margin-top:1em">
+      <li>Retours les plus élevés : <b>Textile (25,5 %)</b> et <b>Chaussures (23,3 %)</b> ; canaux Application et Marketplace.</li>
+      <li>Prix catalogue proche des concurrents (+0,3 % et +2,3 % au dernier relevé) : un écart limité, à analyser plus finement.</li>
+    </ul>
+    <div class="callout"><b>Décisions attendues :</b> valider le planning de 6 semaines et désigner un responsable pour chaque source de données.</div>
+    <div class="footer"><span>CycleNova · Données de ventes</span><span>8</span></div>
+  </section>
+
+</div>
+<div class="nav">← → pour naviguer · Ctrl+P pour exporter en PDF</div>
+<script>
+  const slides=[...document.querySelectorAll('.slide')];let i=0;
+  function show(n){i=Math.max(0,Math.min(slides.length-1,n));slides.forEach((s,k)=>s.classList.toggle('active',k===i));}
+  document.addEventListener('keydown',e=>{
+    if(['ArrowRight','PageDown',' '].includes(e.key)){e.preventDefault();show(i+1);}
+    if(['ArrowLeft','PageUp'].includes(e.key)){e.preventDefault();show(i-1);}
+  });
+  document.addEventListener('click',e=>{ if(e.clientX>innerWidth/2) show(i+1); else show(i-1); });
+</script>
+</body>
+</html>
